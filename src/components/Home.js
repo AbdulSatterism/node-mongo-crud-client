@@ -3,39 +3,36 @@ import { Link, useLoaderData } from 'react-router-dom';
 
 const Home = () => {
     const users = useLoaderData();
-    const [displayUser, setDisplayUser] = useState(users)
+    const [displayUsers, setDisplayUsers] = useState(users);
 
     const handleDelete = user => {
-        const agree = window.confirm(`Are you sure you want to delete ${user.name}`);
+        const agree = window.confirm(`Are you sure want to delete ${user.name}`);
         if (agree) {
-            // console.log('deleting user with ', user._id)
+            // console.log('deleting item is ', user._id)
             fetch(`http://localhost:5000/users/${user._id}`, {
-                method: 'DELETE'
+                method: "DELETE"
             })
                 .then(res => res.json())
                 .then(data => {
                     if (data.deletedCount > 0) {
-                        alert('user deleted successfully');
-                        const remainingUsers = displayUser.filter(usr => usr._id !== user._id);
-                        setDisplayUser(remainingUsers)
+                        alert('User deleted successfully');
+                        const remainingUsers = displayUsers.filter(usr => usr._id !== user._id);
+                        setDisplayUsers(remainingUsers)
                     }
                 })
         }
-
     }
 
     return (
         <div>
-            <h2>Users : {displayUser.length}</h2>
-            <p><Link to='/users/add'>add user</Link></p>
-            <p><Link to='/update'>Update user</Link></p>
+            <h1>Users : {displayUsers.length}</h1>
+            <Link to='/addUser'><h2>Add User</h2></Link>
             <div>
                 {
-                    displayUser.map(user => <p key={user._id}>
-                        {user.name} {user.email}
+                    displayUsers.map(user => <p key={user._id} >
+                        {user.name} {user.email} {user.address}
                         <Link to={`/update/${user._id}`}>
-                            <button >update</button>
-                        </Link>
+                            <button >update</button></Link>
                         <button onClick={() => handleDelete(user)}>x</button>
                     </p>)
                 }
